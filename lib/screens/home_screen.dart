@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:walk_mate/provider/theme_provider.dart';
 
 import 'distanceinput_screen.dart';
 
@@ -11,13 +13,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isDarkModeActive = false;
-
-  void toggleDarkMode() {
-    setState(() {
-      isDarkModeActive = !isDarkModeActive;
-    });
-  }
+  // bool isDarkModeActive = false;
+  //
+  //
+  // void toggleDarkMode() {
+  //   setState(() {
+  //     isDarkModeActive = !isDarkModeActive;
+  //   });
+  // }
 
   void _onGetStartedPressed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -36,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final double imageHeight = screenSize.height;
     final double headerPadding = screenSize.width * 0.06;
     final double buttonPadding = screenSize.width * 0.08;
+
+    final provider = Provider.of<ThemeProvider>(context);
+    bool isDarkModeActive = provider.themeData.brightness == Brightness.dark;
 
     return SafeArea(
       child: Scaffold(
@@ -58,8 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       icon: const Icon(Icons.incomplete_circle_rounded),
                       iconSize: iconSize,
-                      color: Color(0xff20c56c),
-                      onPressed: toggleDarkMode,
+                      color: const Color(0xff20c56c),
+                      onPressed: () {
+                        provider.toggleTheme();
+                      },
                     ),
                   ],
                 ),
